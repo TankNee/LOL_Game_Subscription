@@ -7,7 +7,7 @@ on:
     schedule:
         - cron: "0 16 * * *"
 jobs:
-    Bing-spider:
+    LOL-Publisher:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout

@@ -21,9 +21,11 @@ function packageGames(games) {
             end: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours() + 2, gameDate.getMinutes()],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
+                email: "lpl@qq.com",
             },
             url: "https://lpl.qq.com/es/live.shtml",
             status: "TENTATIVE",
+            calName: `英雄联盟${game.GameName}`,
         };
     });
 }
