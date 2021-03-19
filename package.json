@@ -4,7 +4,7 @@
   "description": "a lpl contest subscription, powered by nodejs and tencent official api.",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node index.js"
   },
   "keywords": [
     "lpl",
