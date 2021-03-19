@@ -26,6 +26,7 @@ function packageGames(games, calName) {
             url: "https://lpl.qq.com/es/live.shtml",
             status: "TENTATIVE",
             calName: calName ? calName : `英雄联盟${game.GameName}`,
+            geo: { lat: 30.0095, lon: 120.2669 },
         };
     });
 }
