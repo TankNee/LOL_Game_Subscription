@@ -21,7 +21,7 @@ https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/${gameType}/${gameType
 
 - gameType可取的值为ldl，lpl。
 
-示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/lpl/lpl/ics
+示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/lpl/lpl.ics
 
 各个战队的链接：
 
