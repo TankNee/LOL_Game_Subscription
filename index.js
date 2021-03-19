@@ -6,7 +6,7 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
  *
  * @param {{}[]} games
  */
-function packageGames(games) {
+function packageGames(games, calName) {
     return games.map((game) => {
         const gameDate = new Date(game.MatchDate);
         let gameName = game.bMatchName;
@@ -25,7 +25,7 @@ function packageGames(games) {
             },
             url: "https://lpl.qq.com/es/live.shtml",
             status: "TENTATIVE",
-            calName: `英雄联盟${game.GameName}`,
+            calName: calName ? calName : `英雄联盟${game.GameName}`,
         };
     });
 }
@@ -78,7 +78,7 @@ async function main() {
     for (const key in ldlTeams) {
         if (Object.hasOwnProperty.call(ldlTeams, key)) {
             const team = ldlTeams[key];
-            const teamResult = icsTool.createEvents(packageGames(team));
+            const teamResult = icsTool.createEvents(packageGames(team, `${key}赛程`));
             if (teamResult.error) {
                 console.error(teamResult.error);
             } else {
@@ -89,7 +89,7 @@ async function main() {
     for (const key in lplTeams) {
         if (Object.hasOwnProperty.call(lplTeams, key)) {
             const team = lplTeams[key];
-            const teamResult = icsTool.createEvents(packageGames(team));
+            const teamResult = icsTool.createEvents(packageGames(team, `${key}赛程`));
             if (teamResult.error) {
                 console.error(teamResult.error);
             } else {
