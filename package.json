@@ -1,0 +1,20 @@
+{
+  "name": "lpl_calendar",
+  "version": "1.0.0",
+  "description": "a lpl contest subscription, powered by nodejs and tencent official api.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "keywords": [
+    "lpl",
+    "ics",
+    "calendar"
+  ],
+  "author": "TankNee",
+  "license": "MIT",
+  "dependencies": {
+    "ics": "^2.27.0",
+    "superagent": "^6.1.0"
+  }
+}

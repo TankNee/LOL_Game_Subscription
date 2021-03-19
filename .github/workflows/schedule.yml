@@ -1,0 +1,41 @@
+name: Bing Picture
+
+on:
+    push:
+        branches:
+            - master
+    schedule:
+        - cron: "0 16 * * *"
+jobs:
+    Bing-spider:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Install Node.js, NPM
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - name: "Install dependencies"
+              run: npm install
+            - name: "Working"
+              timeout-minutes: 350
+              run: npm run start
+            - name: Commit files
+              continue-on-error: true
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add -A
+                  git commit -m "LPL and LDL game calendar has updated" -a
+            - name: "Push changes"
+              uses: ad-m/github-push-action@master
+              continue-on-error: true
+              with:
+                  github_token: ${{ secrets.RELEASE_TOKEN }}
+            - name: "Create Release"
+              uses: elgohr/Github-Release-Action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+              with:
+                  args: LPLEveryDayUpdate
