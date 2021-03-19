@@ -8,7 +8,10 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
  */
 function packageGames(games, calName) {
     return games.map((game) => {
-        const gameDate = new Date(game.MatchDate);
+        var gameDate = new Date(game.MatchDate);
+        var timezone = 8; //目标时区时间，东八区
+        var offset_GMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+        gameDate = new Date(gameDate.getTime() + offset_GMT * 60 * 1000 + timezone * 60 * 60 * 1000);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
         if (hasResult) {
