@@ -12,7 +12,7 @@ function packageGames(games, calName) {
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
         if (hasResult) {
-            gameName += ` ${game.ScoreA} : ${game.ScoreB}`;
+            gameName += ` - ${game.ScoreA} : ${game.ScoreB}`;
         }
         return {
             title: gameName,
