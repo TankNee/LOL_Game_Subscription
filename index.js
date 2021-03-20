@@ -10,7 +10,7 @@ function packageGames(games, calName) {
     return games.map((game) => {
         // const [fullDate, year, month, day, hour, minute] = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})/g.exec(game.MatchDate);
         const gameDate = new Date(game.MatchDate);
-        gameDate.setHours(gameDate.getHours() - 8);
+        // gameDate.setHours(gameDate.getHours() - 8);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
         if (hasResult) {
@@ -31,6 +31,10 @@ function packageGames(games, calName) {
             status: "TENTATIVE",
             calName: calName ? calName : `英雄联盟${game.GameName}`,
             geo: { lat: 30.0095, lon: 120.2669 },
+            startInputType: "local",
+            startOutputType: "local",
+            endOutputType: "local",
+            endOutputType: "local",
         };
     });
 }
