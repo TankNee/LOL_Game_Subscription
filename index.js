@@ -8,7 +8,9 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
  */
 function packageGames(games, calName) {
     return games.map((game) => {
-        const [fullDate, year, month, day, hour, minute] = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})/g.exec(game.MatchDate);
+        // const [fullDate, year, month, day, hour, minute] = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})/g.exec(game.MatchDate);
+        const gameDate = new Date(game.MatchDate);
+        gameDate.setHours(gameDate.getHours() - 8);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
         if (hasResult) {
@@ -17,8 +19,10 @@ function packageGames(games, calName) {
         return {
             title: gameName,
             description: `${game.GameName}${game.GameTypeName}${game.GameProcName}`,
-            start: [parseInt(year), parseInt(month), parseInt(day), parseInt(hour), parseInt(minute)],
-            end: [parseInt(year), parseInt(month), parseInt(day), parseInt(hour) + 2, parseInt(minute)],
+            start: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours(), gameDate.getMinutes()],
+            end: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours() + 2, gameDate.getMinutes()],
+            // start: [parseInt(year), parseInt(month), parseInt(day), parseInt(hour), parseInt(minute)],
+            // end: [parseInt(year), parseInt(month), parseInt(day), parseInt(hour) + 2, parseInt(minute)],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
                 email: "lpl@qq.com",
