@@ -37,3 +37,7 @@ https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/${gameType}/team/${tea
 ---
 
 iOS请将链接复制到备忘录打开，Android用户也可以这样尝试一下，不行的话可以找个日历订阅软件。
+
+带提醒的日历请在`.ics`之前加上`-alarm`。
+
+示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/lpl/lpl-alarm.ics
