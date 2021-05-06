@@ -9,6 +9,7 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
 function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
         const gameDate = new Date(game.MatchDate);
+        const gameEndDate = new Date(gameDate.getTime() + 2 * 60 * 60 * 1000);
         // const alarmDate = new Date(gameDate.getTime() - 30 * 60 * 1000);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
@@ -19,7 +20,7 @@ function packageGames(games, hasAlarm, calName) {
             title: gameName,
             description: `${game.GameName}${game.GameTypeName}${game.GameProcName}`,
             start: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours(), gameDate.getMinutes()],
-            end: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours() + 2 > 23 ? gameDate.getHours() + 2 - 24 : gameDate.getHours() + 2, gameDate.getMinutes()],
+            end: [gameEndDate.getFullYear(), gameEndDate.getMonth() + 1, gameEndDate.getDate(), gameEndDate.getHours(), gameEndDate.getMinutes()],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
                 email: "lpl@qq.com",
@@ -118,8 +119,8 @@ function extractGames(gameBundle) {
 function buildFolders(games) {
     games.forEach((game) => {
         fs.rmdirSync(`./${game.abbreviation}`, { recursive: true });
-        fs.mkdirSync(`./${game.abbreviation}`);
-        fs.mkdirSync(`./${game.abbreviation}/team`);
+        if (!fs.existsSync(`./${game.abbreviation}`)) fs.mkdirSync(`./${game.abbreviation}`);
+        if (!fs.existsSync(`./${game.abbreviation}/team`)) fs.mkdirSync(`./${game.abbreviation}/team`);
     });
 }
 
