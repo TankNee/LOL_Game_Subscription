@@ -21,7 +21,7 @@ https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/${gameType}/${gameType
 
 - gameType可取的值为2021_ldl，2021_lpl。
 
-示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/2021_lpl/lpl.ics
+示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/2021_lpl/2021_lpl.ics
 
 各个战队的链接：
 
@@ -40,4 +40,4 @@ iOS请将链接复制到备忘录打开，Android用户也可以这样尝试一�
 
 带提醒的日历请在`.ics`之前加上`-alarm`。
 
-示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/2021_lpl/lpl-alarm.ics
+示例：https://cdn.jsdelivr.net/gh/TankNee/LOL_Game_Subscription/2021_lpl/2021_lpl-alarm.ics
