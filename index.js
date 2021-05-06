@@ -19,7 +19,7 @@ function packageGames(games, hasAlarm, calName) {
             title: gameName,
             description: `${game.GameName}${game.GameTypeName}${game.GameProcName}`,
             start: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours(), gameDate.getMinutes()],
-            end: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours() + 2, gameDate.getMinutes()],
+            end: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours() + 2 > 23 ? gameDate.getHours() + 2 - 24 : gameDate.getHours() + 2, gameDate.getMinutes()],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
                 email: "lpl@qq.com",
@@ -60,59 +60,80 @@ function getTeams(games) {
  *
  * @param {{}} gameBundle
  * @param {boolean} hasAlarm
+ * @param {string} gameName
  */
-function generateICS(gameBundle, hasAlarm) {
-    const ldlGameInfo = gameBundle.msg.filter((game) => game.GameName.includes("发展联赛"));
-    const lplGameInfo = gameBundle.msg.filter((game) => game.GameName.includes("职业联赛"));
+function generateICS(gameBundle, hasAlarm, gameName) {
+    const gameInfo = gameBundle.msg.filter((game) => game.GameName === gameName.rawName);
 
-    const ldlTeams = getTeams(ldlGameInfo);
-    const lplTeams = getTeams(lplGameInfo);
+    const teams = getTeams(gameInfo);
 
-    const ldlGames = packageGames(ldlGameInfo, hasAlarm);
-    const lplGames = packageGames(lplGameInfo, hasAlarm);
+    const games = packageGames(gameInfo, hasAlarm);
 
-    const ldlResult = icsTool.createEvents(ldlGames);
-    if (ldlResult.error) {
-        console.error(ldlResult.error);
+    const result = icsTool.createEvents(games);
+
+    if (result.error) {
+        console.error(result.error);
     } else {
-        fs.writeFileSync(`./ldl/ldl${hasAlarm ? "-alarm" : ""}.ics`, ldlResult.value);
+        fs.writeFileSync(`./${gameName.abbreviation}/${gameName.abbreviation}${hasAlarm ? "-alarm" : ""}.ics`, result.value);
+        // console.log(`${gameName.rawName}赛程构造成功！`);
     }
-    const lplResult = icsTool.createEvents(lplGames);
-    if (lplResult.error) {
-        console.error(lplResult.error);
-    } else {
-        fs.writeFileSync(`./lpl/lpl${hasAlarm ? "-alarm" : ""}.ics`, lplResult.value);
-    }
+
     // Team Game
-    for (const key in ldlTeams) {
-        if (Object.hasOwnProperty.call(ldlTeams, key)) {
-            const team = ldlTeams[key];
+    for (const key in teams) {
+        if (Object.hasOwnProperty.call(teams, key)) {
+            const team = teams[key];
             const teamResult = icsTool.createEvents(packageGames(team, hasAlarm, `${key}赛程`));
             if (teamResult.error) {
                 console.error(teamResult.error);
             } else {
-                fs.writeFileSync(`./ldl/team/${key}${hasAlarm ? "-alarm" : ""}.ics`, teamResult.value);
-            }
-        }
-    }
-    for (const key in lplTeams) {
-        if (Object.hasOwnProperty.call(lplTeams, key)) {
-            const team = lplTeams[key];
-            const teamResult = icsTool.createEvents(packageGames(team, hasAlarm, `${key}赛程`));
-            if (teamResult.error) {
-                console.error(teamResult.error);
-            } else {
-                fs.writeFileSync(`./lpl/team/${key}${hasAlarm ? "-alarm" : ""}.ics`, teamResult.value);
+                fs.writeFileSync(`./${gameName.abbreviation}/team/${key}${hasAlarm ? "-alarm" : ""}.ics`, teamResult.value);
+                // console.log(`${gameName.rawName}中的${key}赛程构造成功！`);
             }
         }
     }
 }
 
+function extractGames(gameBundle) {
+    const games = [];
+    const abbreviation = {
+        发展联赛: "ldl",
+        全球总决赛: "s-champion",
+        职业联赛: "lpl",
+        季中冠军赛: "msi",
+        全明星赛: "all-star",
+        德玛西亚杯: "demacia",
+    };
+    gameBundle.msg
+        .filter((g) => /(\d+)([^\d]+)/g.test(g.GameName))
+        .forEach((game) => {
+            let matches = /(\d+)([^\d]+)/g.exec(game.GameName);
+            if (games.findIndex((g) => g.rawName === game.GameName) === -1) games.push({ rawName: game.GameName, abbreviation: `${matches[1]}_${abbreviation[matches[2]]}` });
+        });
+    return games;
+}
+/**
+ *
+ * @param {string[]} games
+ */
+function buildFolders(games) {
+    games.forEach((game) => {
+        fs.rmdirSync(`./${game.abbreviation}`, { recursive: true });
+        fs.mkdirSync(`./${game.abbreviation}`);
+        fs.mkdirSync(`./${game.abbreviation}/team`);
+    });
+}
+
 async function main() {
     const buffer = (await request.get(API_URL)).body;
     const gameBundle = JSON.parse(buffer);
-    generateICS(gameBundle, false);
-    generateICS(gameBundle, true);
+    const games = extractGames(gameBundle);
+    buildFolders(games);
+    games
+        // .filter((g) => ["2021_lpl", "2021_msi"].includes(g.abbreviation))
+        .forEach((game) => {
+            generateICS(gameBundle, false, game);
+            generateICS(gameBundle, true, game);
+        });
 }
 
 main();
