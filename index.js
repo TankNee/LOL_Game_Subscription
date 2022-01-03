@@ -46,11 +46,16 @@ function getTeams(games) {
     games.forEach((game) => {
         const teams = game.bMatchName.split("vs");
         const [teamA, teamB] = teams;
-        if (!result[teamA.trim()]) {
-            result[teamA.trim()] = [];
-        }
-        if (!result[teamB.trim()]) {
-            result[teamB.trim()] = [];
+        try {
+            if (!result[teamA.trim()]) {
+                result[teamA.trim()] = [];
+            }
+            if (!result[teamB.trim()]) {
+                result[teamB.trim()] = [];
+            }
+        } catch (err) {
+            console.error(err);
+            return null;
         }
         result[teamA.trim()].push(game);
         result[teamB.trim()].push(game);
@@ -102,10 +107,14 @@ function extractGames(gameBundle) {
         职业联赛: "lpl",
         季中冠军赛: "msi",
         全明星赛: "all-star",
-        德玛西亚杯: "demacia",
+        德玛西亚杯: "demacia"
     };
     gameBundle.msg
         .filter((g) => /(\d+)([^\d]+)/g.test(g.GameName))
+        .filter((g) => {
+            let matches = /(\d+)([^\d]+)/g.exec(g.GameName);
+            return abbreviation[matches[2]];
+        })
         .forEach((game) => {
             let matches = /(\d+)([^\d]+)/g.exec(game.GameName);
             if (games.findIndex((g) => g.rawName === game.GameName) === -1) games.push({ rawName: game.GameName, abbreviation: `${matches[1]}_${abbreviation[matches[2]]}` });
