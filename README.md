@@ -13,6 +13,16 @@
 
 如何获取订阅日历链接：
 
+现在可以使用网站来快速制定比赛订阅：https://www.tanknee.cn/LOL_Game_Subscription/#/
+
+### Web网页
+
+![image-20220111123901226](https://img.tanknee.cn/blogpicbed/2022/01/11/2022011114d1b2e035f3c.png)
+
+### 手机
+
+![image-20220111123938686](https://img.tanknee.cn/blogpicbed/2022/01/11/20220111ad5e4abe1e019.png)
+
 完整赛程链接：
 
 ```
