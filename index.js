@@ -30,9 +30,9 @@ function packageGames(games, hasAlarm, calName) {
             calName: calName ? calName : `英雄联盟${game.GameName}`,
             geo: { lat: 30.0095, lon: 120.2669 },
             startInputType: "local",
-            startOutputType: "local",
+            startOutputType: "utc",
             endOutputType: "local",
-            endOutputType: "local",
+            endOutputType: "utc",
             alarms: hasAlarm && !hasResult ? [{ action: "audio", trigger: { minutes: 30, before: true, repeat: 1, attachType: "VALUE=URI", attach: "Glass" } }] : null,
         };
     });
