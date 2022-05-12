@@ -1,5 +1,10 @@
 const request = require("superagent");
 const icsTool = require("ics");
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const fs = require("fs");
 const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMATCH_LIST.js";
 /**
@@ -8,8 +13,8 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
  */
 function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
-        const gameDate = new Date(game.MatchDate);
-        const gameEndDate = new Date(gameDate.getTime() + 2 * 60 * 60 * 1000);
+        const gameDate = dayjs(game.MatchDate).tz("Asia/Shanghai");
+        const gameEndDate = gameDate.add(2, "hour");
         // const alarmDate = new Date(gameDate.getTime() - 30 * 60 * 1000);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
@@ -19,8 +24,8 @@ function packageGames(games, hasAlarm, calName) {
         return {
             title: gameName,
             description: `${game.GameName}${game.GameTypeName}${game.GameProcName}`,
-            start: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours(), gameDate.getMinutes()],
-            end: [gameEndDate.getFullYear(), gameEndDate.getMonth() + 1, gameEndDate.getDate(), gameEndDate.getHours(), gameEndDate.getMinutes()],
+            start: [gameDate.year(), gameDate.month() + 1, gameDate.date(), gameDate.hour(), gameDate.minute()],
+            end: [gameEndDate.year(), gameEndDate.month() + 1, gameEndDate.date(), gameEndDate.hour(), gameEndDate.minute()],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
             },
