@@ -3,9 +3,6 @@ const icsTool = require("ics");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
-// dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Shanghai");
 const fs = require("fs");
 const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMATCH_LIST.js";
 /**
@@ -14,7 +11,7 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
  */
 function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
-        const gameDate = dayjs(game.MatchDate);
+        const gameDate = dayjs(game.MatchDate).subtract(8, "hour");
         const gameEndDate = gameDate.add(2, "hour");
         // const alarmDate = new Date(gameDate.getTime() - 30 * 60 * 1000);
         let gameName = game.bMatchName;
@@ -34,9 +31,9 @@ function packageGames(games, hasAlarm, calName) {
             status: "TENTATIVE",
             calName: calName ? calName : `英雄联盟${game.GameName}`,
             geo: { lat: 30.0095, lon: 120.2669 },
-            startInputType: "local",
+            startInputType: "utc",
             startOutputType: "utc",
-            endInputType: "local",
+            endInputType: "utc",
             endOutputType: "utc",
             alarms: hasAlarm && !hasResult ? [{ action: "audio", trigger: { minutes: 30, before: true, repeat: 1, attachType: "VALUE=URI", attach: "Glass" } }] : null,
         };
