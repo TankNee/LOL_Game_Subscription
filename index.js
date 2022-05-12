@@ -1,18 +1,15 @@
 const request = require("superagent");
 const icsTool = require("ics");
-const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-const timezone = require("dayjs/plugin/timezone");
 const fs = require("fs");
 const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMATCH_LIST.js";
 /**
- * 2021-10-05 21:00:00
+ *
  * @param {{}[]} games
  */
 function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
-        const gameDate = dayjs(game.MatchDate).subtract(8, "hour");
-        const gameEndDate = gameDate.add(2, "hour");
+        const gameDate = new Date(new Date(game.MatchDate).getTime() - 8 * 60 * 60 * 1000);
+        const gameEndDate = new Date(gameDate.getTime() + 2 * 60 * 60 * 1000);
         // const alarmDate = new Date(gameDate.getTime() - 30 * 60 * 1000);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
@@ -22,12 +19,13 @@ function packageGames(games, hasAlarm, calName) {
         return {
             title: gameName,
             description: `${game.GameName}${game.GameTypeName}${game.GameProcName}`,
-            start: [gameDate.year(), gameDate.month() + 1, gameDate.date(), gameDate.hour(), gameDate.minute()],
-            end: [gameEndDate.year(), gameEndDate.month() + 1, gameEndDate.date(), gameEndDate.hour(), gameEndDate.minute()],
+            start: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours(), gameDate.getMinutes()],
+            end: [gameEndDate.getFullYear(), gameEndDate.getMonth() + 1, gameEndDate.getDate(), gameEndDate.getHours(), gameEndDate.getMinutes()],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
+                email: "lpl@qq.com",
             },
-            url: "https://github.com/TankNee/LOL_Game_Subscription",
+            url: "https://lpl.qq.com/es/live.shtml",
             status: "TENTATIVE",
             calName: calName ? calName : `英雄联盟${game.GameName}`,
             geo: { lat: 30.0095, lon: 120.2669 },
@@ -109,7 +107,7 @@ function extractGames(gameBundle) {
         职业联赛: "lpl",
         季中冠军赛: "msi",
         全明星赛: "all-star",
-        德玛西亚杯: "demacia",
+        德玛西亚杯: "demacia"
     };
     gameBundle.msg
         .filter((g) => /(\d+)([^\d]+)/g.test(g.GameName))
