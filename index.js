@@ -23,16 +23,15 @@ function packageGames(games, hasAlarm, calName) {
             end: [gameEndDate.getFullYear(), gameEndDate.getMonth() + 1, gameEndDate.getDate(), gameEndDate.getHours(), gameEndDate.getMinutes()],
             organizer: {
                 name: `英雄联盟${game.GameName}`,
-                email: "lpl@qq.com",
             },
-            url: "https://lpl.qq.com/es/live.shtml",
+            url: "https://github.com/TankNee/LOL_Game_Subscription",
             status: "TENTATIVE",
             calName: calName ? calName : `英雄联盟${game.GameName}`,
             geo: { lat: 30.0095, lon: 120.2669 },
             startInputType: "local",
-            startOutputType: "utc",
+            startOutputType: "local",
             endInputType: "local",
-            endOutputType: "utc",
+            endOutputType: "local",
             alarms: hasAlarm && !hasResult ? [{ action: "audio", trigger: { minutes: 30, before: true, repeat: 1, attachType: "VALUE=URI", attach: "Glass" } }] : null,
         };
     });
@@ -80,6 +79,10 @@ function generateICS(gameBundle, hasAlarm, gameName) {
     if (result.error) {
         console.error(result.error);
     } else {
+        result.value = result.value
+            .replace("BEGIN:VEVENT", "BEGIN:VEVENT\nTZID:Asia/Shanghai")
+            .replace("DTSTART:", "DTSTART;TZID=Asia/Shanghai:")
+            .replace("DTEND:", "DTEND;TZID=Asia/Shanghai:");
         fs.writeFileSync(`./${gameName.abbreviation}/${gameName.abbreviation}${hasAlarm ? "-alarm" : ""}.ics`, result.value);
         // console.log(`${gameName.rawName}赛程构造成功！`);
     }
@@ -107,7 +110,7 @@ function extractGames(gameBundle) {
         职业联赛: "lpl",
         季中冠军赛: "msi",
         全明星赛: "all-star",
-        德玛西亚杯: "demacia"
+        德玛西亚杯: "demacia",
     };
     gameBundle.msg
         .filter((g) => /(\d+)([^\d]+)/g.test(g.GameName))
