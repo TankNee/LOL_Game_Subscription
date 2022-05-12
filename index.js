@@ -5,6 +5,7 @@ const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Shanghai");
 const fs = require("fs");
 const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMATCH_LIST.js";
 /**
@@ -13,7 +14,7 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
  */
 function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
-        const gameDate = dayjs(game.MatchDate).tz("Asia/Shanghai");
+        const gameDate = dayjs(game.MatchDate);
         const gameEndDate = gameDate.add(2, "hour");
         // const alarmDate = new Date(gameDate.getTime() - 30 * 60 * 1000);
         let gameName = game.bMatchName;
