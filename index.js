@@ -3,13 +3,13 @@ const icsTool = require("ics");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
-dayjs.extend(utc);
+// dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Shanghai");
 const fs = require("fs");
 const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMATCH_LIST.js";
 /**
- *
+ * 2021-10-05 21:00:00
  * @param {{}[]} games
  */
 function packageGames(games, hasAlarm, calName) {
