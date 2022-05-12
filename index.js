@@ -29,9 +29,9 @@ function packageGames(games, hasAlarm, calName) {
             calName: calName ? calName : `英雄联盟${game.GameName}`,
             geo: { lat: 30.0095, lon: 120.2669 },
             startInputType: "local",
-            startOutputType: "local",
+            startOutputType: "utc",
             endInputType: "local",
-            endOutputType: "local",
+            endOutputType: "utc",
             alarms: hasAlarm && !hasResult ? [{ action: "audio", trigger: { minutes: 30, before: true, repeat: 1, attachType: "VALUE=URI", attach: "Glass" } }] : null,
         };
     });
@@ -79,10 +79,6 @@ function generateICS(gameBundle, hasAlarm, gameName) {
     if (result.error) {
         console.error(result.error);
     } else {
-        // result.value = result.value
-        //     .replace("BEGIN:VEVENT", "BEGIN:VEVENT\nTZID:Asia/Shanghai")
-        //     .replace("DTSTART:", "DTSTART;TZID=Asia/Shanghai:")
-        //     .replace("DTEND:", "DTEND;TZID=Asia/Shanghai:");
         fs.writeFileSync(`./${gameName.abbreviation}/${gameName.abbreviation}${hasAlarm ? "-alarm" : ""}.ics`, result.value);
         // console.log(`${gameName.rawName}赛程构造成功！`);
     }
