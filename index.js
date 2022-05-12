@@ -79,10 +79,10 @@ function generateICS(gameBundle, hasAlarm, gameName) {
     if (result.error) {
         console.error(result.error);
     } else {
-        result.value = result.value
-            .replace("BEGIN:VEVENT", "BEGIN:VEVENT\nTZID:Asia/Shanghai")
-            .replace("DTSTART:", "DTSTART;TZID=Asia/Shanghai:")
-            .replace("DTEND:", "DTEND;TZID=Asia/Shanghai:");
+        // result.value = result.value
+        //     .replace("BEGIN:VEVENT", "BEGIN:VEVENT\nTZID:Asia/Shanghai")
+        //     .replace("DTSTART:", "DTSTART;TZID=Asia/Shanghai:")
+        //     .replace("DTEND:", "DTEND;TZID=Asia/Shanghai:");
         fs.writeFileSync(`./${gameName.abbreviation}/${gameName.abbreviation}${hasAlarm ? "-alarm" : ""}.ics`, result.value);
         // console.log(`${gameName.rawName}赛程构造成功！`);
     }
