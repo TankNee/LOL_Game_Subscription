@@ -13,7 +13,7 @@
 
 如何获取订阅日历链接：
 
-现在可以使用网站来快速制定比赛订阅：[https://www.tanknee.cn/LOL_Game_Subscription/#/](https://tanknee.github.io/LOL_Game_Subscription/#/)
+现在可以使用网站来快速制定比赛订阅：https://tanknee.github.io/LOL_Game_Subscription
 
 ### Web网页
 
