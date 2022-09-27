@@ -10,7 +10,6 @@ function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
         const gameDate = new Date(new Date(game.MatchDate).getTime() - 8 * 60 * 60 * 1000);
         const gameEndDate = new Date(gameDate.getTime() + 2 * 60 * 60 * 1000);
-        // const alarmDate = new Date(gameDate.getTime() - 30 * 60 * 1000);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
         if (hasResult) {
@@ -43,23 +42,25 @@ function packageGames(games, hasAlarm, calName) {
  */
 function getTeams(games) {
     const result = {};
-    games.forEach((game) => {
-        const teams = game.bMatchName.split("vs");
-        const [teamA, teamB] = teams;
-        try {
-            if (!result[teamA.trim()]) {
-                result[teamA.trim()] = [];
+    games
+        .filter((g) => g.bMatchName.includes("vs"))
+        .forEach((game) => {
+            const teams = game.bMatchName.split("vs");
+            const [teamA, teamB] = teams;
+            try {
+                if (!result[teamA.trim()]) {
+                    result[teamA.trim()] = [];
+                }
+                if (!result[teamB.trim()]) {
+                    result[teamB.trim()] = [];
+                }
+            } catch (err) {
+                console.error(err);
+                return null;
             }
-            if (!result[teamB.trim()]) {
-                result[teamB.trim()] = [];
-            }
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
-        result[teamA.trim()].push(game);
-        result[teamB.trim()].push(game);
-    });
+            result[teamA.trim()].push(game);
+            result[teamB.trim()].push(game);
+        });
     return result;
 }
 /**
@@ -81,7 +82,6 @@ function generateICS(gameBundle, hasAlarm, gameName) {
         console.error(result.error);
     } else {
         fs.writeFileSync(`./${gameName.abbreviation}/${gameName.abbreviation}${hasAlarm ? "-alarm" : ""}.ics`, result.value);
-        // console.log(`${gameName.rawName}赛程构造成功！`);
     }
 
     // Team Game
@@ -93,7 +93,6 @@ function generateICS(gameBundle, hasAlarm, gameName) {
                 console.error(teamResult.error);
             } else {
                 fs.writeFileSync(`./${gameName.abbreviation}/team/${key}${hasAlarm ? "-alarm" : ""}.ics`, teamResult.value);
-                // console.log(`${gameName.rawName}中的${key}赛程构造成功！`);
             }
         }
     }
@@ -107,7 +106,7 @@ function extractGames(gameBundle) {
         职业联赛: "lpl",
         季中冠军赛: "msi",
         全明星赛: "all-star",
-        德玛西亚杯: "demacia"
+        德玛西亚杯: "demacia",
     };
     gameBundle.msg
         .filter((g) => /(\d+)([^\d]+)/g.test(g.GameName))
@@ -139,7 +138,6 @@ async function main() {
     const games = extractGames(gameBundle);
     buildFolders(games);
     games
-        // .filter((g) => ["2021_lpl", "2021_msi"].includes(g.abbreviation))
         .forEach((game) => {
             generateICS(gameBundle, false, game);
             generateICS(gameBundle, true, game);
