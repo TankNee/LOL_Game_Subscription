@@ -60,6 +60,7 @@ function getTeams(games) {
             }
             result[teamA.trim()].push(game);
             result[teamB.trim()].push(game);
+            game.bMatchName = `${teamA.trim()} vs ${teamB.trim()}`
         });
     return result;
 }
