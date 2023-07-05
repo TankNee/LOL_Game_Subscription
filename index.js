@@ -224,9 +224,6 @@ function lckGamesToICSObjs(game, hasAlarm, yearStr) {
         description: slug,
         start: [gameDate.getFullYear(), gameDate.getMonth() + 1, gameDate.getDate(), gameDate.getHours(), gameDate.getMinutes()],
         end: [gameEndDate.getFullYear(), gameEndDate.getMonth() + 1, gameEndDate.getDate(), gameEndDate.getHours(), gameEndDate.getMinutes()],
-        organizer: {
-            name: slug
-        },
         url: "https://www.twitch.tv/lck",
         status: "TENTATIVE",
         calName: `${yearStr}_lck`,
