@@ -183,6 +183,9 @@ async function dealLCKGames() {
     
     // 生成各队伍有提醒和无提醒的文件
     let teams = games.map(function(item) {
+        if (item.opponents.length <= 0) {
+            return []
+        }
         return [item.opponents[0].opponent.acronym, item.opponents[1].opponent.acronym]
     });
     let teamNames = [...new Set(teams.flat())];
