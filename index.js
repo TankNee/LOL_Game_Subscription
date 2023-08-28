@@ -213,7 +213,7 @@ function generateLCKICSAndWrite(games, fileName) {
 }
 
 function lckGamesToICSObjs(game, hasAlarm, yearStr) {
-    const gameDate = new Date(new Date(game.original_scheduled_at).getTime() - 8 * 60 * 60 * 1000);
+    const gameDate = new Date(new Date(game.scheduled_at).getTime() - 8 * 60 * 60 * 1000);
     const gameEndDate = new Date(gameDate.getTime() + 2 * 60 * 60 * 1000);
     let slug = game.slug;
     let gameName = game.name;
