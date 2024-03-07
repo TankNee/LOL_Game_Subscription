@@ -9,7 +9,8 @@ const API_URL = "https://lpl.qq.com/web201612/data/LOL_MATCH2_MATCH_HOMEPAGE_BMA
 function packageGames(games, hasAlarm, calName) {
     return games.map((game) => {
         const gameDate = new Date(new Date(game.MatchDate).getTime() - 8 * 60 * 60 * 1000);
-        const gameEndDate = new Date(gameDate.getTime() + 2 * 60 * 60 * 1000);
+        const duration = parseInt(game.GameMode) || 2
+        const gameEndDate = new Date(gameDate.getTime() + duration * 60 * 60 * 1000);
         let gameName = game.bMatchName;
         const hasResult = parseInt(game.ScoreA) || parseInt(game.ScoreB);
         if (hasResult) {
