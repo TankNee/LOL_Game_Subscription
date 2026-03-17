@@ -109,6 +109,7 @@ function extractGames(gameBundle) {
         季中冠军赛: "msi",
         全明星赛: "all-star",
         德玛西亚杯: "demacia",
+        全球先锋赛: "firststand",
     };
     gameBundle.msg
         .filter((g) => /(\d+)([^\d]+)/g.test(g.GameName))
